@@ -1,6 +1,8 @@
+//Create variables for SVG containder
 var svgWidth = 960;
 var svgHeight = 500;
 
+//Create margins around conainter
 var margin = {
   top: 20,
   right: 40,
@@ -8,11 +10,13 @@ var margin = {
   left: 50
 };
 
+
+//Create variables for width and height
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
-// Create an SVG wrapper, append an SVG group that will hold our chart,
-// and shift the latter by left and top margins.
+// Create an SVG wrapper, append an SVG group that will hold chart,
+// and shift by left and top margins.
 var svg = d3
   .select("#scatter")
   .append("svg")
@@ -30,7 +34,7 @@ d3.csv("data.csv").then(function(povertyData, err) {
   var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-  // parse data
+  // Parse data as integers
   povertyData.forEach(function(data) {
     data.poverty = +data.poverty;
     data.obesity = +data.obesity;
@@ -52,18 +56,17 @@ d3.csv("data.csv").then(function(povertyData, err) {
   var bottomAxis = d3.axisBottom(xLinearScale);
   var leftAxis = d3.axisLeft(yLinearScale);
 
-  // append x axis
+  // Append x axis
   var xAxis = chartGroup.append("g")
     .classed("x-axis", true)
     .attr("transform", `translate(0, ${height})`)
     .call(bottomAxis);
 
-  // append y axis
-  // need to transform and translate?
+  // Append y axis
   var yAxis = chartGroup.append("g")
     .call(leftAxis);
 
-  // append initial circles
+  // Append initial circles
   var circles = chartGroup
     .selectAll("circle")
     .data(povertyData)
@@ -74,8 +77,7 @@ d3.csv("data.csv").then(function(povertyData, err) {
     .attr("r", 10)
     .classed("stateCircle", true)
 
-    // text added to bubbles
-
+  // Text added to bubbles
   var text = chartGroup.append("g")
   .selectAll('text')
   .data(povertyData)
@@ -86,19 +88,18 @@ d3.csv("data.csv").then(function(povertyData, err) {
   .text(d => d.abbr)
   .classed('stateText', true)
 
-//
   // Create group for two x-axis labels
   var labelsGroup = chartGroup.append("g")
     .attr("transform", `translate(${width / 2}, ${height + 20})`);
 
+  // Append x axis text
   labelsGroup.append("text")
     .attr("x", 0)
     .attr("y", 20)
     .classed("aText", true)
     .text("Poverty");
 
-
-  // append y axis
+  // Append y axis text
   chartGroup.append("text")
     .attr("transform", "rotate(-90)")
     .attr("y", 0 - 50)
